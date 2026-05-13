@@ -109,6 +109,44 @@ class RoomController extends Controller
             'value' => 4.6,
         ];
 
-        return view('rooms.show', compact('room', 'amenities', 'policies', 'rating'));
+        // Room highlights berdasarkan tipe kamar
+        $highlightsByType = [
+            'standard' => [
+                ['icon' => 'bed', 'title' => 'Tempat Tidur Nyaman', 'description' => '1 Queen Bed dengan bantal premium'],
+                ['icon' => 'size', 'title' => '24 m²', 'description' => 'Ruangan yang cukup luas'],
+                ['icon' => 'view', 'title' => 'Pemandangan Taman', 'description' => 'Jendela menghadap area hijau'],
+            ],
+            'deluxe' => [
+                ['icon' => 'bed', 'title' => 'King Bed Premium', 'description' => '1 King Bed dengan linen mewah'],
+                ['icon' => 'size', 'title' => '36 m²', 'description' => 'Ruangan luas dan elegan'],
+                ['icon' => 'view', 'title' => 'Pemandangan Kota', 'description' => 'Jendela besar menghadap skyline'],
+                ['icon' => 'bath', 'title' => 'Bathtub & Rain Shower', 'description' => 'Kamar mandi mewah terpisah'],
+            ],
+            'suite' => [
+                ['icon' => 'bed', 'title' => 'King Bed Luxury', 'description' => '1 King Bed dengan kasur premium'],
+                ['icon' => 'size', 'title' => '54 m²', 'description' => 'Suite luas dengan ruang tamu'],
+                ['icon' => 'view', 'title' => 'Pemandangan Panorama', 'description' => 'Jendela floor-to-ceiling'],
+                ['icon' => 'living', 'title' => 'Ruang Tamu Terpisah', 'description' => 'Area living room privat'],
+            ],
+            'family' => [
+                ['icon' => 'bed', 'title' => '2 Queen Beds', 'description' => 'Tempat tidur untuk keluarga'],
+                ['icon' => 'size', 'title' => '42 m²', 'description' => 'Ruangan luas untuk keluarga'],
+                ['icon' => 'kids', 'title' => 'Area Bermain Anak', 'description' => 'Sudut bermain dalam kamar'],
+                ['icon' => 'kitchen', 'title' => 'Kitchenette', 'description' => 'Dapur kecil lengkap'],
+            ],
+        ];
+
+        $highlights = $highlightsByType[$room->type] ?? [];
+
+        // Data peta lokasi hotel
+        $mapData = [
+            'lat' => -6.2088,
+            'lng' => 106.8456,
+            'name' => 'Bestay Hotel',
+            'area' => 'Jakarta Pusat, DKI Jakarta',
+            'zoom' => 15,
+        ];
+
+        return view('rooms.show', compact('room', 'amenities', 'policies', 'rating', 'highlights', 'mapData'));
     }
 }

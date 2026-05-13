@@ -22,6 +22,8 @@
     </script>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    @stack('styles')
 </head>
 <body class="bg-canvas text-ink font-sans antialiased min-h-screen flex flex-col">
     {{-- Navigation --}}
@@ -34,5 +36,7 @@
 
     {{-- Footer --}}
     @include('components.footer')
+
+    @stack('scripts')
 </body>
 </html>
