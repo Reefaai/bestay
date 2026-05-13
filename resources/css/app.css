@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@import 'tailwindcss';
+
+/* Hide elements with x-cloak until Alpine.js initializes */
+[x-cloak] {
+    display: none !important;
+}
+
+/* Enable class-based dark mode: `<html class="dark">` triggers the `dark:` variant */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+/*
+ * Bestay Design System
+ * Airbnb-inspired tokens: Rausch accent, Inter font, soft rounded corners.
+ * Light-mode tokens live in :root; dark-mode overrides live under .dark.
+ */
+
+@theme {
+    /* Font Family */
+    --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+    /* Colors - Brand & Accent (same across themes) */
+    --color-rausch: #ff385c;
+    --color-rausch-active: #e00b41;
+    --color-rausch-disabled: #ffd1da;
+
+    /* Colors - Text (light defaults) */
+    --color-ink: #222222;
+    --color-body: #3f3f3f;
+    --color-muted: #6a6a6a;
+    --color-muted-soft: #929292;
+
+    /* Colors - Surface (light defaults) */
+    --color-canvas: #ffffff;
+    --color-surface-soft: #f7f7f7;
+    --color-surface-strong: #f2f2f2;
+
+    /* Colors - Borders (light defaults) */
+    --color-hairline: #dddddd;
+    --color-hairline-soft: #ebebeb;
+    --color-border-strong: #c1c1c1;
+
+    /* Colors - Semantic */
+    --color-error: #c13515;
+    --color-error-hover: #b32505;
+    --color-on-primary: #ffffff;
+    --color-legal-link: #428bff;
+
+    /* Border Radius */
+    --radius-xs: 4px;
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-xl: 32px;
+    --radius-full: 9999px;
+}
+
+/* Light theme (default) — also applies to `.light` override */
+html {
+    color-scheme: light;
+}
+
+/* Dark theme overrides: remap the same token names so any bg-canvas / text-ink /
+   border-hairline utility across the app flips to dark values without needing
+   dark: variants on every element. */
+html.dark {
+    color-scheme: dark;
+
+    /* Text */
+    --color-ink: #f5f5f5;
+    --color-body: #d4d4d4;
+    --color-muted: #a3a3a3;
+    --color-muted-soft: #6a6a6a;
+
+    /* Surface */
+    --color-canvas: #0f0f10;
+    --color-surface-soft: #1a1a1c;
+    --color-surface-strong: #232327;
+
+    /* Borders */
+    --color-hairline: #2e2e32;
+    --color-hairline-soft: #232327;
+    --color-border-strong: #3a3a3f;
+
+    /* Keep the brand accent, but slightly lighten the disabled tint so it reads
+       on dark surfaces */
+    --color-rausch-disabled: #5a2030;
+
+    /* On-primary stays white since Rausch CTA doesn't change */
+    --color-on-primary: #ffffff;
+}
+
+/* Keep native date picker styling consistent per theme */
+input[type="date"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="time"],
+input[type="week"] {
+    color-scheme: light;
+}
+
+html.dark input[type="date"],
+html.dark input[type="datetime-local"],
+html.dark input[type="month"],
+html.dark input[type="time"],
+html.dark input[type="week"] {
+    color-scheme: dark;
+}
