@@ -21,6 +21,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Skip seeding if data already exists (idempotent for Railway redeploys)
+        if (User::count() > 0) {
+            return;
+        }
+
         // Create admin user
         $admin = User::factory()->create([
             'name' => 'Admin Bestay',
