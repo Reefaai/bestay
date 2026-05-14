@@ -1,8 +1,15 @@
-# 🏨 Bestay - Hotel Booking System
+# 🏨 Bestay — Hotel Booking System
 
-Sistem reservasi hotel berbasis web yang dibangun dengan Laravel 12, Tailwind CSS 4, dan Alpine.js. Aplikasi ini menyediakan fitur lengkap mulai dari pencarian kamar, booking, pembayaran, hingga panel admin untuk manajemen hotel.
+[![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?style=flat-square&logo=laravel&logoColor=white)](https://laravel.com)
+[![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?style=flat-square&logo=php&logoColor=white)](https://php.net)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
-> **Tugas Mata Kuliah:** Pemrograman Web Lanjut (PWL)
+Sistem reservasi hotel berbasis web yang dibangun dengan **Laravel 12**, **Tailwind CSS 4**, dan **Alpine.js**. Aplikasi ini menyediakan fitur lengkap mulai dari pencarian kamar, booking, pembayaran, hingga panel admin untuk manajemen hotel.
+
+> **📚 Tugas Mata Kuliah:** Pemrograman Web Lanjut (PWL)
+
+---
 
 ## 📸 Screenshots
 
@@ -14,57 +21,70 @@ Sistem reservasi hotel berbasis web yang dibangun dengan Laravel 12, Tailwind CS
 |:---:|:---:|:---:|
 | ![Dashboard](docs/screenshots/dashboard.png) | ![Payment](docs/screenshots/payment.png) | ![Admin](docs/screenshots/admin.png) |
 
-## ✨ Fitur
+---
 
-### Untuk Tamu (Guest/User)
+## ✨ Fitur Utama
+
+### 👤 Untuk Tamu (Guest/User)
 - 🔍 Pencarian & filter kamar (tipe, harga, kapasitas)
 - 📅 Booking kamar dengan pengecekan ketersediaan otomatis
 - 💳 Sistem pembayaran (Bank Transfer, E-Wallet, Credit Card)
-- 📊 Dashboard untuk melihat riwayat booking
+- 📊 Dashboard untuk melihat riwayat booking & status pembayaran
 - 🔔 Notifikasi real-time (booking dikonfirmasi, pembayaran berhasil, dll)
 - ❌ Pembatalan booking
 
-### Untuk Admin
-- 🏠 Manajemen kamar (CRUD)
+### 🛡️ Untuk Admin
+- 🏠 Manajemen kamar (CRUD lengkap dengan upload gambar)
 - 📋 Manajemen booking (konfirmasi, tolak, selesaikan)
 - ⚠️ Deteksi konflik jadwal booking
-- 💰 Monitoring pembayaran
+- 💰 Monitoring & verifikasi pembayaran
 
-### Sistem
-- 🔐 Autentikasi (login, register, logout)
+### ⚙️ Sistem
+- 🔐 Autentikasi lengkap (login, register, logout)
 - 🛡️ Role-based access control (admin & user)
-- ⏰ Auto-expire pembayaran yang tidak diselesaikan
-- 📝 Payment status logging (audit trail)
-- 🌐 REST API dengan Laravel Sanctum
+- ⏰ Auto-expire pembayaran yang tidak diselesaikan (via scheduler)
+- 📝 Payment status logging / audit trail
+- 🌐 REST API lengkap dengan Laravel Sanctum
 - 📱 Responsive design (mobile-friendly)
+- 🚀 Siap deploy ke Railway (Nixpacks)
+
+---
 
 ## 🛠️ Tech Stack
 
 | Layer | Teknologi |
 |-------|-----------|
-| Backend | PHP 8.2, Laravel 12 |
-| Frontend | Blade, Tailwind CSS 4, Alpine.js |
-| Database | SQLite (dev) / MySQL (prod) |
-| Auth API | Laravel Sanctum |
-| Build Tool | Vite 7 |
-| Deployment | Railway (Nixpacks) |
+| **Backend** | PHP 8.2, Laravel 12 |
+| **Frontend** | Blade Templates, Tailwind CSS 4, Alpine.js 3 |
+| **Database** | SQLite (development) / MySQL (production) |
+| **Authentication** | Laravel Sanctum (API tokens) |
+| **Build Tool** | Vite 7 |
+| **Deployment** | Railway via Nixpacks |
+
+---
 
 ## 📋 Prasyarat
 
-Pastikan sudah terinstall di komputer kamu:
+Pastikan sudah terinstall:
 
-- **PHP** >= 8.2 (dengan extension: pdo_sqlite, mbstring, xml, curl, bcmath, fileinfo)
-- **Composer** >= 2.x
-- **Node.js** >= 18.x
-- **NPM** >= 9.x
-- **Git**
+| Software | Versi Minimum |
+|----------|---------------|
+| PHP | >= 8.2 |
+| Composer | >= 2.x |
+| Node.js | >= 18.x |
+| NPM | >= 9.x |
+| Git | latest |
+
+**PHP Extensions yang dibutuhkan:** `pdo_sqlite`, `mbstring`, `xml`, `curl`, `bcmath`, `fileinfo`, `tokenizer`, `ctype`, `openssl`
+
+---
 
 ## 🚀 Instalasi & Setup
 
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/USERNAME/bestay.git
+git clone https://github.com/reefai/bestay.git
 cd bestay
 ```
 
@@ -84,16 +104,19 @@ php artisan key:generate
 
 ### 4. Setup Database
 
-Aplikasi menggunakan SQLite secara default (tidak perlu install MySQL):
+Aplikasi menggunakan **SQLite** secara default — tidak perlu install MySQL untuk development:
 
 ```bash
-# Buat file database SQLite
+# Buat file database SQLite (Windows)
+type nul > database/database.sqlite
+
+# Atau di Linux/Mac
 touch database/database.sqlite
 
 # Jalankan migrasi
 php artisan migrate
 
-# (Opsional) Isi data dummy untuk testing
+# Isi data demo untuk testing
 php artisan db:seed
 ```
 
@@ -111,203 +134,293 @@ npm run build
 composer dev
 ```
 
-Ini akan menjalankan:
-- Laravel server di `http://localhost:8000`
-- Queue worker
-- Log viewer (Pail)
-- Vite dev server (hot reload)
+Perintah ini menjalankan secara bersamaan:
+- 🌐 Laravel server → `http://localhost:8000`
+- 📨 Queue worker (untuk notifikasi async)
+- 📋 Log viewer (Pail)
+- ⚡ Vite dev server (hot reload CSS/JS)
 
 **Atau jalankan manual satu per satu:**
 
 ```bash
-# Terminal 1 - Laravel server
+# Terminal 1 — Laravel server
 php artisan serve
 
-# Terminal 2 - Vite (untuk hot reload CSS/JS)
+# Terminal 2 — Vite (hot reload)
 npm run dev
 
-# Terminal 3 - Queue worker (untuk notifikasi)
+# Terminal 3 — Queue worker (opsional, untuk notifikasi)
 php artisan queue:listen
 ```
 
 ### 7. Akses Aplikasi
 
-Buka browser dan akses `http://localhost:8000`
+Buka browser: **http://localhost:8000**
+
+---
 
 ## 👤 Akun Demo
 
-Setelah menjalankan `php artisan db:seed`, kamu bisa login dengan akun berikut:
+Setelah menjalankan `php artisan db:seed`, gunakan akun berikut:
 
-| Role | Email | Password |
-|------|-------|----------|
-| Admin | `admin@bestay.com` | `password` |
-| User | `user@bestay.com` | `password` |
-| User | `siti@bestay.com` | `password` |
+| Role | Nama | Email | Password |
+|------|------|-------|----------|
+| **Admin** | Admin Bestay | `admin@bestay.com` | `password` |
+| **User** | Budi Santoso | `user@bestay.com` | `password` |
+| **User** | Siti Rahayu | `siti@bestay.com` | `password` |
+
+> ⚠️ Seeder bersifat idempotent — jika data sudah ada, `db:seed` tidak akan menduplikasi data.
+
+---
 
 ## 📁 Struktur Project
 
 ```
 bestay/
 ├── app/
-│   ├── Console/Commands/     # Artisan commands (expire payments)
+│   ├── Console/Commands/        # Artisan commands (ExpirePendingPayments)
 │   ├── Http/
-│   │   ├── Controllers/      # API controllers
-│   │   │   └── Web/          # Web (Blade) controllers
-│   │   ├── Middleware/       # Admin middleware
-│   │   └── Requests/        # Form request validation
-│   ├── Models/               # Eloquent models
-│   ├── Policies/             # Authorization policies
-│   ├── Providers/            # Service providers
-│   └── Services/             # Business logic layer
-│       └── Payments/         # Payment service & exceptions
+│   │   ├── Controllers/         # API controllers
+│   │   │   └── Web/             # Web (Blade) controllers
+│   │   ├── Middleware/          # Custom middleware (AdminMiddleware)
+│   │   └── Requests/           # Form request validation classes
+│   ├── Models/                  # Eloquent models (User, Room, Booking, Payment, etc.)
+│   ├── Policies/                # Authorization policies
+│   ├── Providers/               # Service providers
+│   └── Services/                # Business logic layer
+│       └── Payments/            # Payment service & custom exceptions
 ├── database/
-│   ├── factories/            # Model factories
-│   ├── migrations/           # Database schema
-│   └── seeders/              # Demo data seeder
+│   ├── factories/               # Model factories (untuk testing)
+│   ├── migrations/              # Database schema migrations
+│   └── seeders/                 # Demo data seeder
 ├── resources/
-│   ├── css/                  # Tailwind CSS
-│   ├── js/                   # Alpine.js
-│   └── views/               # Blade templates
-│       ├── admin/            # Admin panel views
-│       ├── auth/             # Login & register
-│       ├── components/       # Reusable components
-│       ├── dashboard/        # User dashboard
-│       ├── layouts/          # Base layout
-│       ├── payments/         # Payment flow
-│       └── rooms/            # Room listing & detail
+│   ├── css/                     # Tailwind CSS source
+│   ├── js/                      # Alpine.js & app scripts
+│   └── views/                   # Blade templates
+│       ├── admin/               # Admin panel views
+│       ├── auth/                # Login & register pages
+│       ├── components/          # Reusable Blade components
+│       ├── dashboard/           # User dashboard
+│       ├── layouts/             # Base layout templates
+│       ├── payments/            # Payment flow pages
+│       └── rooms/               # Room listing & detail
 ├── routes/
-│   ├── api.php              # REST API routes
-│   └── web.php              # Web routes
-├── tests/                    # PHPUnit tests
-├── nixpacks.toml            # Railway deployment config
-└── composer.json            # PHP dependencies
+│   ├── api.php                  # REST API routes (Sanctum protected)
+│   └── web.php                  # Web routes (session-based)
+├── tests/                       # PHPUnit test suite
+├── nixpacks.toml                # Railway deployment config
+├── CONTRIBUTING.md              # Panduan kontribusi
+└── LICENSE                      # MIT License
 ```
+
+---
 
 ## 🔌 API Documentation
 
-Aplikasi menyediakan REST API lengkap dengan autentikasi Sanctum.
+REST API lengkap dengan autentikasi **Laravel Sanctum** (Bearer Token).
 
-### Authentication
+### 🔑 Authentication
 
+| Method | Endpoint | Deskripsi |
+|--------|----------|-----------|
+| `POST` | `/api/register` | Registrasi user baru |
+| `POST` | `/api/login` | Login & dapatkan token |
+| `POST` | `/api/logout` | Logout (revoke token) |
+| `GET` | `/api/profile` | Lihat profil user |
+
+**Contoh Login:**
 ```bash
-# Register
-POST /api/register
-Body: { "name", "email", "password", "password_confirmation" }
-
-# Login
-POST /api/login
-Body: { "email", "password" }
-Response: { "token": "..." }
-
-# Logout (requires token)
-POST /api/logout
-Header: Authorization: Bearer {token}
+curl -X POST http://localhost:8000/api/login \
+  -H "Content-Type: application/json" \
+  -d '{"email": "user@bestay.com", "password": "password"}'
 ```
 
-### Rooms (Public)
-
-```bash
-# List rooms
-GET /api/rooms
-
-# Room detail
-GET /api/rooms/{id}
-
-# Check availability (requires auth)
-GET /api/rooms/{id}/availability?check_in=2025-01-01&check_out=2025-01-03
+**Response:**
+```json
+{
+  "token": "1|abc123...",
+  "user": { "id": 2, "name": "Budi Santoso", "email": "user@bestay.com" }
+}
 ```
 
-### Bookings (Requires Auth)
+### 🏨 Rooms
 
-```bash
-# List my bookings
-GET /api/bookings
+| Method | Endpoint | Auth | Deskripsi |
+|--------|----------|------|-----------|
+| `GET` | `/api/rooms` | ❌ | Daftar semua kamar aktif |
+| `GET` | `/api/rooms/{id}` | ❌ | Detail kamar |
+| `GET` | `/api/rooms/{id}/availability` | ✅ | Cek ketersediaan kamar |
+| `POST` | `/api/rooms` | ✅ Admin | Tambah kamar baru |
+| `PUT` | `/api/rooms/{id}` | ✅ Admin | Update kamar |
+| `DELETE` | `/api/rooms/{id}` | ✅ Admin | Hapus kamar |
 
-# Create booking
-POST /api/bookings
-Body: { "room_id", "check_in", "check_out", "notes" }
+### 📅 Bookings
 
-# View booking detail
-GET /api/bookings/{id}
+| Method | Endpoint | Auth | Deskripsi |
+|--------|----------|------|-----------|
+| `GET` | `/api/bookings` | ✅ | Daftar booking saya |
+| `POST` | `/api/bookings` | ✅ | Buat booking baru |
+| `GET` | `/api/bookings/{id}` | ✅ | Detail booking |
+| `PATCH` | `/api/bookings/{id}/cancel` | ✅ | Batalkan booking |
 
-# Cancel booking
-PATCH /api/bookings/{id}/cancel
-```
+### 💳 Payments
 
-### Payments (Requires Auth)
+| Method | Endpoint | Auth | Deskripsi |
+|--------|----------|------|-----------|
+| `GET` | `/api/payments` | ✅ | Daftar pembayaran saya |
+| `GET` | `/api/payments/{id}` | ✅ | Detail pembayaran |
+| `POST` | `/api/payments/{id}/method` | ✅ | Pilih metode bayar |
+| `POST` | `/api/payments/{id}/process` | ✅ | Proses pembayaran |
+| `POST` | `/api/payments/{id}/retry` | ✅ | Retry pembayaran gagal |
 
-```bash
-# List my payments
-GET /api/payments
+### 🔔 Notifications
 
-# View payment detail
-GET /api/payments/{id}
+| Method | Endpoint | Auth | Deskripsi |
+|--------|----------|------|-----------|
+| `GET` | `/api/notifications` | ✅ | Daftar notifikasi |
+| `PATCH` | `/api/notifications/{id}/read` | ✅ | Tandai sudah dibaca |
+| `POST` | `/api/notifications/read-all` | ✅ | Tandai semua dibaca |
 
-# Select payment method
-POST /api/payments/{id}/method
-Body: { "method": "bank_transfer|e_wallet|credit_card" }
+### 🛡️ Admin Endpoints
 
-# Process payment
-POST /api/payments/{id}/process
+| Method | Endpoint | Auth | Deskripsi |
+|--------|----------|------|-----------|
+| `GET` | `/api/admin/bookings` | ✅ Admin | Semua booking |
+| `GET` | `/api/admin/bookings/conflicts` | ✅ Admin | Booking konflik |
+| `GET` | `/api/admin/bookings/{id}` | ✅ Admin | Detail booking |
+| `PATCH` | `/api/admin/bookings/{id}/status` | ✅ Admin | Update status booking |
+| `GET` | `/api/admin/payments` | ✅ Admin | Semua pembayaran |
+| `GET` | `/api/admin/payments/{id}` | ✅ Admin | Detail pembayaran |
+| `PATCH` | `/api/admin/payments/{id}/status` | ✅ Admin | Update status pembayaran |
 
-# Retry failed payment
-POST /api/payments/{id}/retry
-```
+> 💡 Semua endpoint yang membutuhkan auth menggunakan header: `Authorization: Bearer {token}`
 
-### Admin (Requires Auth + Admin Role)
-
-```bash
-# Bookings management
-GET    /api/admin/bookings
-GET    /api/admin/bookings/conflicts
-GET    /api/admin/bookings/{id}
-PATCH  /api/admin/bookings/{id}/status
-
-# Payments management
-GET    /api/admin/payments
-GET    /api/admin/payments/{id}
-PATCH  /api/admin/payments/{id}/status
-```
+---
 
 ## 🧪 Testing
 
 ```bash
 # Jalankan semua test
-composer test
-
-# Atau langsung
 php artisan test
 
-# Dengan coverage
+# Atau via composer script
+composer test
+
+# Dengan coverage report
 php artisan test --coverage
 ```
 
-## 🚢 Deployment (Railway)
+---
 
-Aplikasi sudah dikonfigurasi untuk deploy ke [Railway](https://railway.app):
+## 🚢 Deployment
 
-1. Push repo ke GitHub
-2. Connect repo di Railway dashboard
+### Railway (Recommended)
+
+Aplikasi sudah dikonfigurasi untuk deploy ke [Railway](https://railway.app) menggunakan Nixpacks:
+
+1. Push repository ke GitHub
+2. Buat project baru di Railway → Connect GitHub repo
 3. Set environment variables:
-   - `APP_KEY` (generate dengan `php artisan key:generate --show`)
-   - `APP_ENV=production`
-   - `APP_DEBUG=false`
-   - `DB_CONNECTION=sqlite`
-4. Deploy otomatis via Nixpacks
 
-Konfigurasi deployment ada di `nixpacks.toml`.
+| Variable | Value |
+|----------|-------|
+| `APP_KEY` | Generate: `php artisan key:generate --show` |
+| `APP_ENV` | `production` |
+| `APP_DEBUG` | `false` |
+| `APP_URL` | URL Railway kamu |
+| `DB_CONNECTION` | `sqlite` |
+
+4. Deploy otomatis setiap push ke `main`
+
+> Konfigurasi deployment ada di [`nixpacks.toml`](nixpacks.toml). Seeder berjalan otomatis saat pertama kali deploy.
+
+---
+
+## 🗄️ Database Schema
+
+```
+┌──────────┐     ┌──────────────┐     ┌──────────┐
+│  users   │     │   bookings   │     │  rooms   │
+├──────────┤     ├──────────────┤     ├──────────┤
+│ id       │◄────│ user_id      │     │ id       │
+│ name     │     │ room_id      │────►│ name     │
+│ email    │     │ check_in     │     │ type     │
+│ password │     │ check_out    │     │ price    │
+│ role     │     │ total_price  │     │ capacity │
+└──────────┘     │ status       │     │ is_active│
+                 │ notes        │     └──────────┘
+                 └──────┬───────┘
+                        │
+                 ┌──────▼───────┐     ┌─────────────────────┐
+                 │   payments   │     │  payment_status_logs │
+                 ├──────────────┤     ├─────────────────────┤
+                 │ id           │◄────│ payment_id          │
+                 │ booking_id   │     │ from_status         │
+                 │ reference    │     │ to_status           │
+                 │ amount       │     │ actor_user_id       │
+                 │ method       │     │ actor_type          │
+                 │ status       │     │ reason              │
+                 │ paid_at      │     └─────────────────────┘
+                 │ expires_at   │
+                 └──────────────┘
+
+                 ┌────────────────┐
+                 │ notifications  │
+                 ├────────────────┤
+                 │ id             │
+                 │ user_id        │
+                 │ booking_id     │
+                 │ type           │
+                 │ title          │
+                 │ message        │
+                 │ is_read        │
+                 └────────────────┘
+```
+
+---
+
+## 🔄 Payment Flow
+
+```
+┌─────────┐    ┌─────────────┐    ┌──────────┐    ┌────────┐
+│ Booking │───►│ Select      │───►│ Process  │───►│  Paid  │
+│ Created │    │ Method      │    │ Payment  │    │   ✓    │
+└─────────┘    └─────────────┘    └────┬─────┘    └────────┘
+                                       │
+                                       ▼
+                                  ┌──────────┐    ┌─────────┐
+                                  │  Failed  │───►│  Retry  │──► (kembali ke Process)
+                                  └──────────┘    └─────────┘
+                                       │
+                                       ▼
+                                  ┌──────────┐
+                                  │ Expired  │ (auto, setelah timeout)
+                                  └──────────┘
+```
+
+**Status pembayaran:** `pending` → `paid` | `failed` → `expired`
+
+---
 
 ## 🤝 Kontribusi
 
+Lihat [CONTRIBUTING.md](CONTRIBUTING.md) untuk panduan lengkap kontribusi.
+
+**Quick start:**
+
 1. Fork repository ini
-2. Buat branch fitur baru (`git checkout -b feature/fitur-baru`)
-3. Commit perubahan (`git commit -m 'feat: tambah fitur baru'`)
-4. Push ke branch (`git push origin feature/fitur-baru`)
+2. Buat branch fitur baru: `git checkout -b feature/nama-fitur`
+3. Commit perubahan: `git commit -m 'feat: deskripsi singkat'`
+4. Push ke branch: `git push origin feature/nama-fitur`
 5. Buat Pull Request
+
+---
 
 ## 📄 Lisensi
 
-Project ini menggunakan lisensi [MIT](LICENSE).
+Project ini dilisensikan di bawah [MIT License](LICENSE).
+
+---
 
 ## 👨‍💻 Author
 
@@ -316,5 +429,5 @@ Project ini menggunakan lisensi [MIT](LICENSE).
 ---
 
 <p align="center">
-  Built with ❤️ using Laravel 12
+  <sub>Built with ❤️ using Laravel 12 • Tailwind CSS 4 • Alpine.js</sub>
 </p>
