@@ -38,7 +38,9 @@ class AdminBookingController extends Controller
      */
     public function show(Booking $booking): View
     {
-        $booking->load(['user', 'room']);
+        $booking->load(['user', 'room', 'payments' => function ($q) {
+            $q->orderBy('created_at', 'desc');
+        }]);
 
         return view('admin.bookings.show', compact('booking'));
     }
@@ -66,41 +68,42 @@ class AdminBookingController extends Controller
      */
     public function conflicts(): View
     {
-        $activeBookings = Booking::whereIn('status', ['pending', 'confirmed'])
+        // Eager-load relationships upfront so no lazy load needed later
+        $activeBookings = Booking::with(['user', 'room'])
+            ->whereIn('status', ['pending', 'confirmed'])
             ->orderBy('room_id')
             ->orderBy('check_in')
             ->get();
 
-        $conflicts = collect();
+        $conflictIds = collect();
 
         $grouped = $activeBookings->groupBy('room_id');
 
-        foreach ($grouped as $roomId => $roomBookings) {
+        foreach ($grouped as $roomBookings) {
             if ($roomBookings->count() < 2) {
                 continue;
             }
 
-            $bookingsArray = $roomBookings->values();
+            $arr = $roomBookings->values();
 
-            for ($i = 0; $i < $bookingsArray->count(); $i++) {
-                for ($j = $i + 1; $j < $bookingsArray->count(); $j++) {
-                    $a = $bookingsArray[$i];
-                    $b = $bookingsArray[$j];
+            for ($i = 0; $i < $arr->count(); $i++) {
+                for ($j = $i + 1; $j < $arr->count(); $j++) {
+                    $a = $arr[$i];
+                    $b = $arr[$j];
 
                     // Overlap: A.check_in < B.check_out AND A.check_out > B.check_in
                     if ($a->check_in < $b->check_out && $a->check_out > $b->check_in) {
-                        $conflicts->push($a);
-                        $conflicts->push($b);
+                        $conflictIds->push($a->id);
+                        $conflictIds->push($b->id);
                     }
                 }
             }
         }
 
-        $conflicts = $conflicts->unique('id')->values();
-        $conflicts->load(['user', 'room']);
-
-        // Group conflicts by room for the view
-        $conflicts = $conflicts->groupBy('room_id');
+        // Filter the already-loaded collection to only conflict bookings, then group by room
+        $conflicts = $activeBookings
+            ->whereIn('id', $conflictIds->unique()->values()->all())
+            ->groupBy('room_id');
 
         return view('admin.bookings.conflicts', compact('conflicts'));
     }

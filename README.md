@@ -5,7 +5,7 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
-Sistem reservasi hotel berbasis web yang dibangun dengan **Laravel 12**, **Tailwind CSS 4**, dan **Alpine.js**. Aplikasi ini menyediakan fitur lengkap mulai dari pencarian kamar, booking, pembayaran, hingga panel admin untuk manajemen hotel.
+Sistem reservasi hotel berbasis web yang dibangun dengan **Laravel 12**, **Tailwind CSS 4**, dan **Alpine.js**. Menyediakan fitur lengkap mulai dari pencarian kamar, booking, pembayaran, hingga panel admin dengan dashboard, monitoring payment, dan manajemen user.
 
 > **📚 Tugas Mata Kuliah:** Pemrograman Web Lanjut (PWL)
 
@@ -13,13 +13,22 @@ Sistem reservasi hotel berbasis web yang dibangun dengan **Laravel 12**, **Tailw
 
 ## 📸 Screenshots
 
+<details>
+<summary><strong>Lihat Screenshots</strong></summary>
+
 | Halaman Utama | Daftar Kamar | Detail Kamar |
 |:---:|:---:|:---:|
 | ![Home](docs/screenshots/home.png) | ![Rooms](docs/screenshots/rooms.png) | ![Room Detail](docs/screenshots/room-detail.png) |
 
-| Dashboard User | Pembayaran | Admin Panel |
+| Dashboard User | Pembayaran | Admin Dashboard |
 |:---:|:---:|:---:|
-| ![Dashboard](docs/screenshots/dashboard.png) | ![Payment](docs/screenshots/payment.png) | ![Admin](docs/screenshots/admin.png) |
+| ![Dashboard](docs/screenshots/dashboard.png) | ![Payment](docs/screenshots/payment.png) | ![Admin](docs/screenshots/admin-dashboard.png) |
+
+| Admin Bookings | Admin Payments | Admin Users |
+|:---:|:---:|:---:|
+| ![Bookings](docs/screenshots/admin-bookings.png) | ![Payments](docs/screenshots/admin-payments.png) | ![Users](docs/screenshots/admin-users.png) |
+
+</details>
 
 ---
 
@@ -29,23 +38,26 @@ Sistem reservasi hotel berbasis web yang dibangun dengan **Laravel 12**, **Tailw
 - 🔍 Pencarian & filter kamar (tipe, harga, kapasitas)
 - 📅 Booking kamar dengan pengecekan ketersediaan otomatis
 - 💳 Sistem pembayaran (Bank Transfer, E-Wallet, Credit Card)
-- 📊 Dashboard untuk melihat riwayat booking & status pembayaran
-- 🔔 Notifikasi real-time (booking dikonfirmasi, pembayaran berhasil, dll)
-- ❌ Pembatalan booking
+- 📊 Dashboard riwayat booking & status pembayaran
+- 🔔 Notifikasi (booking dikonfirmasi, pembayaran berhasil, dll)
+- ❌ Pembatalan booking dengan refund otomatis
 
 ### 🛡️ Untuk Admin
-- 🏠 Manajemen kamar (CRUD lengkap dengan upload gambar)
-- 📋 Manajemen booking (konfirmasi, tolak, selesaikan)
-- ⚠️ Deteksi konflik jadwal booking
-- 💰 Monitoring & verifikasi pembayaran
+- 📊 **Dashboard** — statistik real-time, chart booking & revenue 6 bulan, distribusi status payment
+- 🏠 **Manajemen Kamar** — CRUD lengkap, soft-delete (tidak bisa hapus jika ada booking aktif)
+- 📋 **Manajemen Booking** — konfirmasi, tolak, selesaikan, dengan payment history per booking
+- ⚠️ **Deteksi Konflik** — deteksi otomatis booking yang overlap pada kamar & tanggal yang sama
+- 💰 **Monitoring Payment** — filter, search, verifikasi, override status (paid/failed/refunded)
+- 👥 **Manajemen User** — lihat semua user, riwayat booking per user
 
 ### ⚙️ Sistem
 - 🔐 Autentikasi lengkap (login, register, logout)
 - 🛡️ Role-based access control (admin & user)
-- ⏰ Auto-expire pembayaran yang tidak diselesaikan (via scheduler)
-- 📝 Payment status logging / audit trail
+- ⏰ Auto-expire pembayaran yang tidak diselesaikan (scheduler setiap 5 menit)
+- 📝 Payment audit trail (immutable status log)
 - 🌐 REST API lengkap dengan Laravel Sanctum
 - 📱 Responsive design (mobile-friendly)
+- 🌙 Dark mode support
 - 🚀 Siap deploy ke Railway (Nixpacks)
 
 ---
@@ -56,6 +68,7 @@ Sistem reservasi hotel berbasis web yang dibangun dengan **Laravel 12**, **Tailw
 |-------|-----------|
 | **Backend** | PHP 8.2, Laravel 12 |
 | **Frontend** | Blade Templates, Tailwind CSS 4, Alpine.js 3 |
+| **Charts** | Chart.js 4 |
 | **Database** | SQLite (development) / MySQL (production) |
 | **Authentication** | Laravel Sanctum (API tokens) |
 | **Build Tool** | Vite 7 |
@@ -67,14 +80,42 @@ Sistem reservasi hotel berbasis web yang dibangun dengan **Laravel 12**, **Tailw
 
 | Dokumen | Deskripsi |
 |---------|-----------|
-| [ERD — Entity Relationship Diagram](docs/erd.md) | Skema database lengkap, relasi antar tabel, status transisi |
-| [System Flow](docs/flow.md) | Alur booking, pembayaran, notifikasi, admin, dan scheduler |
+| [ERD — Entity Relationship Diagram](docs/erd.md) | Skema database lengkap, diagram Mermaid, relasi antar tabel, status transisi |
+| [System Flow](docs/flow.md) | Alur booking, pembayaran, notifikasi, admin dashboard, scheduler — dengan diagram Mermaid |
 
 ---
 
-## 📋 Prasyarat
+## 🚀 Quick Start
 
-Pastikan sudah terinstall:
+```bash
+composer install && npm install
+cp .env.example .env && php artisan key:generate
+type nul > database/database.sqlite   # Windows
+php artisan migrate && php artisan db:seed
+npm run build
+composer dev
+```
+
+Buka **http://localhost:8000**
+
+---
+
+## 👤 Akun Demo
+
+| Role | Email | Password |
+|------|-------|----------|
+| **Admin** | `admin@bestay.com` | `password` |
+| **User** | `user@bestay.com` | `password` |
+| **User** | `siti@bestay.com` | `password` |
+
+---
+
+## 📋 Prasyarat & Instalasi Lengkap
+
+<details>
+<summary><strong>Lihat prasyarat & langkah instalasi lengkap</strong></summary>
+
+### Prasyarat
 
 | Software | Versi Minimum |
 |----------|---------------|
@@ -82,13 +123,8 @@ Pastikan sudah terinstall:
 | Composer | >= 2.x |
 | Node.js | >= 18.x |
 | NPM | >= 9.x |
-| Git | latest |
 
-**PHP Extensions yang dibutuhkan:** `pdo_sqlite`, `mbstring`, `xml`, `curl`, `bcmath`, `fileinfo`, `tokenizer`, `ctype`, `openssl`
-
----
-
-## 🚀 Instalasi & Setup
+**PHP Extensions:** `pdo_sqlite`, `mbstring`, `xml`, `curl`, `bcmath`, `fileinfo`, `tokenizer`, `ctype`, `openssl`
 
 ### 1. Clone Repository
 
@@ -113,23 +149,18 @@ php artisan key:generate
 
 ### 4. Setup Database
 
-Aplikasi menggunakan **SQLite** secara default — tidak perlu install MySQL untuk development:
-
 ```bash
 # Buat file database SQLite (Windows)
 type nul > database/database.sqlite
 
-# Atau di Linux/Mac
+# Linux/Mac
 touch database/database.sqlite
 
-# Jalankan migrasi
 php artisan migrate
-
-# Isi data demo untuk testing
 php artisan db:seed
 ```
 
-### 5. Build Frontend Assets
+### 5. Build Frontend
 
 ```bash
 npm run build
@@ -137,99 +168,87 @@ npm run build
 
 ### 6. Jalankan Aplikasi
 
-**Cara cepat (semua service sekaligus):**
-
+**Semua service sekaligus:**
 ```bash
 composer dev
 ```
 
-Perintah ini menjalankan secara bersamaan:
-- 🌐 Laravel server → `http://localhost:8000`
-- 📨 Queue worker (untuk notifikasi async)
-- 📋 Log viewer (Pail)
-- ⚡ Vite dev server (hot reload CSS/JS)
+Menjalankan: Laravel server · Queue worker · Log viewer (Pail) · Vite HMR
 
-**Atau jalankan manual satu per satu:**
-
+**Manual:**
 ```bash
-# Terminal 1 — Laravel server
-php artisan serve
-
-# Terminal 2 — Vite (hot reload)
-npm run dev
-
-# Terminal 3 — Queue worker (opsional, untuk notifikasi)
-php artisan queue:listen
+php artisan serve      # Terminal 1
+npm run dev            # Terminal 2
+php artisan queue:listen  # Terminal 3 (opsional)
 ```
 
-### 7. Akses Aplikasi
-
-Buka browser: **http://localhost:8000**
-
----
-
-## 👤 Akun Demo
-
-Setelah menjalankan `php artisan db:seed`, gunakan akun berikut:
-
-| Role | Nama | Email | Password |
-|------|------|-------|----------|
-| **Admin** | Admin Bestay | `admin@bestay.com` | `password` |
-| **User** | Budi Santoso | `user@bestay.com` | `password` |
-| **User** | Siti Rahayu | `siti@bestay.com` | `password` |
-
-> ⚠️ Seeder bersifat idempotent — jika data sudah ada, `db:seed` tidak akan menduplikasi data.
+</details>
 
 ---
 
 ## 📁 Struktur Project
 
+<details>
+<summary><strong>Lihat struktur direktori</strong></summary>
+
 ```
 bestay/
 ├── app/
-│   ├── Console/Commands/        # Artisan commands (ExpirePendingPayments)
+│   ├── Console/Commands/        # ExpirePendingPayments
 │   ├── Http/
-│   │   ├── Controllers/         # API controllers
-│   │   │   └── Web/             # Web (Blade) controllers
-│   │   ├── Middleware/          # Custom middleware (AdminMiddleware)
-│   │   └── Requests/           # Form request validation classes
-│   ├── Models/                  # Eloquent models (User, Room, Booking, Payment, etc.)
-│   ├── Policies/                # Authorization policies
-│   ├── Providers/               # Service providers
-│   └── Services/                # Business logic layer
-│       └── Payments/            # Payment service & custom exceptions
+│   │   ├── Controllers/         # API controllers (Sanctum)
+│   │   │   └── Web/             # Web controllers (session)
+│   │   │       ├── AdminDashboardController.php
+│   │   │       ├── AdminBookingController.php
+│   │   │       ├── AdminPaymentController.php
+│   │   │       ├── AdminRoomController.php
+│   │   │       └── AdminUserController.php
+│   │   ├── Middleware/          # AdminMiddleware
+│   │   └── Requests/            # Form Request validation
+│   ├── Models/                  # User, Room, Booking, Payment, PaymentStatusLog, Notification
+│   ├── Policies/                # BookingPolicy, PaymentPolicy, RoomPolicy
+│   └── Services/
+│       ├── BookingService.php
+│       ├── PaymentService.php
+│       ├── NotificationService.php
+│       └── Payments/Exceptions/ # Custom exceptions
 ├── database/
-│   ├── factories/               # Model factories (untuk testing)
-│   ├── migrations/              # Database schema migrations
-│   └── seeders/                 # Demo data seeder
+│   ├── factories/
+│   ├── migrations/
+│   └── seeders/
 ├── resources/
-│   ├── css/                     # Tailwind CSS source
-│   ├── js/                      # Alpine.js & app scripts
-│   └── views/                   # Blade templates
-│       ├── admin/               # Admin panel views
-│       ├── auth/                # Login & register pages
-│       ├── components/          # Reusable Blade components
+│   ├── css/                     # Tailwind CSS + design tokens
+│   ├── js/                      # Alpine.js
+│   └── views/
+│       ├── admin/               # Dashboard, bookings, payments, rooms, users
+│       ├── auth/
+│       ├── components/          # navbar, footer, status-badge, pagination
 │       ├── dashboard/           # User dashboard
-│       ├── layouts/             # Base layout templates
-│       ├── payments/            # Payment flow pages
-│       └── rooms/               # Room listing & detail
+│       ├── layouts/             # app.blade.php, admin.blade.php
+│       ├── payments/
+│       └── rooms/
 ├── routes/
-│   ├── api.php                  # REST API routes (Sanctum protected)
-│   └── web.php                  # Web routes (session-based)
-├── tests/                       # PHPUnit test suite
-├── docs/                        # Dokumentasi (ERD, flow)
-├── nixpacks.toml                # Railway deployment config
-├── CONTRIBUTING.md              # Panduan kontribusi
-└── LICENSE                      # MIT License
+│   ├── api.php                  # REST API (Sanctum)
+│   ├── web.php                  # Web routes (session)
+│   └── console.php              # Scheduler
+├── tests/
+├── docs/                        # ERD, flow diagram
+├── nixpacks.toml
+└── CONTRIBUTING.md
 ```
+
+</details>
 
 ---
 
 ## 🔌 API Documentation
 
-REST API lengkap dengan autentikasi **Laravel Sanctum** (Bearer Token).
+<details>
+<summary><strong>Lihat dokumentasi REST API lengkap</strong></summary>
 
-### 🔑 Authentication
+Autentikasi menggunakan **Laravel Sanctum** (Bearer Token).
+
+### Authentication
 
 | Method | Endpoint | Deskripsi |
 |--------|----------|-----------|
@@ -253,18 +272,18 @@ curl -X POST http://localhost:8000/api/login \
 }
 ```
 
-### 🏨 Rooms
+### Rooms
 
 | Method | Endpoint | Auth | Deskripsi |
 |--------|----------|------|-----------|
-| `GET` | `/api/rooms` | ❌ | Daftar semua kamar aktif |
+| `GET` | `/api/rooms` | ❌ | Daftar kamar aktif |
 | `GET` | `/api/rooms/{id}` | ❌ | Detail kamar |
-| `GET` | `/api/rooms/{id}/availability` | ✅ | Cek ketersediaan kamar |
-| `POST` | `/api/rooms` | ✅ Admin | Tambah kamar baru |
+| `GET` | `/api/rooms/{id}/availability` | ✅ | Cek ketersediaan |
+| `POST` | `/api/rooms` | ✅ Admin | Tambah kamar |
 | `PUT` | `/api/rooms/{id}` | ✅ Admin | Update kamar |
 | `DELETE` | `/api/rooms/{id}` | ✅ Admin | Hapus kamar |
 
-### 📅 Bookings
+### Bookings
 
 | Method | Endpoint | Auth | Deskripsi |
 |--------|----------|------|-----------|
@@ -273,7 +292,7 @@ curl -X POST http://localhost:8000/api/login \
 | `GET` | `/api/bookings/{id}` | ✅ | Detail booking |
 | `PATCH` | `/api/bookings/{id}/cancel` | ✅ | Batalkan booking |
 
-### 💳 Payments
+### Payments
 
 | Method | Endpoint | Auth | Deskripsi |
 |--------|----------|------|-----------|
@@ -283,161 +302,174 @@ curl -X POST http://localhost:8000/api/login \
 | `POST` | `/api/payments/{id}/process` | ✅ | Proses pembayaran |
 | `POST` | `/api/payments/{id}/retry` | ✅ | Retry pembayaran gagal |
 
-### 🔔 Notifications
+### Notifications
 
 | Method | Endpoint | Auth | Deskripsi |
 |--------|----------|------|-----------|
 | `GET` | `/api/notifications` | ✅ | Daftar notifikasi |
-| `PATCH` | `/api/notifications/{id}/read` | ✅ | Tandai sudah dibaca |
+| `PATCH` | `/api/notifications/{id}/read` | ✅ | Tandai dibaca |
 | `POST` | `/api/notifications/read-all` | ✅ | Tandai semua dibaca |
 
-### 🛡️ Admin Endpoints
+### Admin Endpoints
 
 | Method | Endpoint | Auth | Deskripsi |
 |--------|----------|------|-----------|
 | `GET` | `/api/admin/bookings` | ✅ Admin | Semua booking |
 | `GET` | `/api/admin/bookings/conflicts` | ✅ Admin | Booking konflik |
-| `GET` | `/api/admin/bookings/{id}` | ✅ Admin | Detail booking |
 | `PATCH` | `/api/admin/bookings/{id}/status` | ✅ Admin | Update status booking |
 | `GET` | `/api/admin/payments` | ✅ Admin | Semua pembayaran |
-| `GET` | `/api/admin/payments/{id}` | ✅ Admin | Detail pembayaran |
-| `PATCH` | `/api/admin/payments/{id}/status` | ✅ Admin | Update status pembayaran |
+| `PATCH` | `/api/admin/payments/{id}/status` | ✅ Admin | Override status payment |
 
-> 💡 Semua endpoint yang membutuhkan auth menggunakan header: `Authorization: Bearer {token}`
+> Semua endpoint yang membutuhkan auth: `Authorization: Bearer {token}`
+
+</details>
+
+---
+
+## 🗄️ Database Schema
+
+<details>
+<summary><strong>Lihat skema database & payment flow</strong></summary>
+
+```
+┌──────────┐       ┌──────────────┐       ┌──────────┐
+│  users   │       │   bookings   │       │  rooms   │
+├──────────┤       ├──────────────┤       ├──────────┤
+│ id (PK)  │◄──────│ user_id (FK) │       │ id (PK)  │
+│ name     │       │ room_id (FK) │──────►│ name     │
+│ email    │       │ check_in     │       │ type     │
+│ password │       │ check_out    │       │ price    │
+│ role     │       │ total_price  │       │ capacity │
+└──────────┘       │ status       │       │ is_active│
+     ▲             │ notes        │       └──────────┘
+     │             └──────┬───────┘
+     │                    │
+     │             ┌──────▼───────┐       ┌──────────────────────┐
+     │             │   payments   │       │ payment_status_logs  │
+     │             ├──────────────┤       ├──────────────────────┤
+     │             │ id (PK)      │◄──────│ payment_id (FK)      │
+     │             │ booking_id   │       │ from_status          │
+     │             │ reference    │       │ to_status            │
+     │             │ amount       │       │ actor_user_id (FK)   │
+     │             │ method       │       │ actor_type           │
+     │             │ status       │       │ reason               │
+     │             │ paid_at      │       └──────────────────────┘
+     │             │ expires_at   │
+     └─────────────│ verified_by  │
+                   └──────────────┘
+
+     ┌────────────────┐
+     │ notifications  │
+     ├────────────────┤
+     │ user_id (FK)   │──► users.id
+     │ booking_id (FK)│──► bookings.id
+     │ type / title   │
+     │ message        │
+     │ is_read        │
+     └────────────────┘
+```
+
+**Payment status transitions:**
+```
+pending → paid | failed | expired
+paid    → refunded  (hanya jika booking cancelled)
+```
+
+**Booking status transitions:**
+```
+pending   → confirmed | cancelled
+confirmed → cancelled | completed
+```
+
+Lihat [docs/erd.md](docs/erd.md) untuk dokumentasi lengkap dengan diagram Mermaid.
+
+</details>
+
+---
+
+## 🚢 Deployment
+
+<details>
+<summary><strong>Lihat panduan deploy ke Railway</strong></summary>
+
+### Railway (Recommended)
+
+Aplikasi sudah dikonfigurasi untuk deploy ke [Railway](https://railway.app) via Nixpacks (`nixpacks.toml`).
+
+#### 1. Buat Project
+
+- Push repo ke GitHub
+- Railway: **New Project** → **Deploy from GitHub repo**
+- Railway otomatis mendeteksi Nixpacks
+
+#### 2. Setup Database
+
+**Opsi A — SQLite:**
+- Tambah **Volume** di Railway, mount ke `/app/storage` dan `/app/database`
+- Set `DB_CONNECTION=sqlite`
+
+**Opsi B — MySQL:**
+- **Add Plugin** → **MySQL**
+- Set `DB_CONNECTION=mysql`
+
+#### 3. Environment Variables
+
+| Variable | Value |
+|----------|-------|
+| `APP_KEY` | Jalankan `php artisan key:generate --show` lokal |
+| `APP_ENV` | `production` |
+| `APP_DEBUG` | `false` |
+| `APP_URL` | URL Railway kamu |
+
+#### 4. Scheduler
+
+Railway tidak punya cron bawaan. Gunakan [cron-job.org](https://cron-job.org) (gratis) untuk trigger `payments:expire` setiap 5 menit, atau deploy instance kedua dengan start command `php artisan schedule:work`.
+
+#### 5. Queue Worker
+
+- **Sederhana:** Set `QUEUE_CONNECTION=sync`
+- **Production:** Tambah service baru, start command: `php artisan queue:work --tries=3`
+
+</details>
 
 ---
 
 ## 🧪 Testing
 
 ```bash
-# Jalankan semua test
+# Semua test
 php artisan test
 
-# Atau via composer script
+# Via composer
 composer test
 
-# Dengan coverage report
+# Dengan coverage
 php artisan test --coverage
+
+# Test spesifik
+php artisan test --filter=TestName
 ```
-
----
-
-## 🚢 Deployment
-
-### Railway (Recommended)
-
-Aplikasi sudah dikonfigurasi untuk deploy ke [Railway](https://railway.app) menggunakan Nixpacks:
-
-1. Push repository ke GitHub
-2. Buat project baru di Railway → Connect GitHub repo
-3. Set environment variables:
-
-| Variable | Value |
-|----------|-------|
-| `APP_KEY` | Generate: `php artisan key:generate --show` |
-| `APP_ENV` | `production` |
-| `APP_DEBUG` | `false` |
-| `APP_URL` | URL Railway kamu |
-| `DB_CONNECTION` | `sqlite` |
-
-4. Deploy otomatis setiap push ke `main`
-
-> Konfigurasi deployment ada di [`nixpacks.toml`](nixpacks.toml). Seeder berjalan otomatis saat pertama kali deploy.
-
----
-
-## 🗄️ Database Schema
-
-```
-┌──────────┐     ┌──────────────┐     ┌──────────┐
-│  users   │     │   bookings   │     │  rooms   │
-├──────────┤     ├──────────────┤     ├──────────┤
-│ id       │◄────│ user_id      │     │ id       │
-│ name     │     │ room_id      │────►│ name     │
-│ email    │     │ check_in     │     │ type     │
-│ password │     │ check_out    │     │ price    │
-│ role     │     │ total_price  │     │ capacity │
-└──────────┘     │ status       │     │ is_active│
-                 │ notes        │     └──────────┘
-                 └──────┬───────┘
-                        │
-                 ┌──────▼───────┐     ┌─────────────────────┐
-                 │   payments   │     │  payment_status_logs │
-                 ├──────────────┤     ├─────────────────────┤
-                 │ id           │◄────│ payment_id          │
-                 │ booking_id   │     │ from_status         │
-                 │ reference    │     │ to_status           │
-                 │ amount       │     │ actor_user_id       │
-                 │ method       │     │ actor_type          │
-                 │ status       │     │ reason              │
-                 │ paid_at      │     └─────────────────────┘
-                 │ expires_at   │
-                 └──────────────┘
-
-                 ┌────────────────┐
-                 │ notifications  │
-                 ├────────────────┤
-                 │ id             │
-                 │ user_id        │
-                 │ booking_id     │
-                 │ type           │
-                 │ title          │
-                 │ message        │
-                 │ is_read        │
-                 └────────────────┘
-```
-
----
-
-## 🔄 Payment Flow
-
-```
-┌─────────┐    ┌─────────────┐    ┌──────────┐    ┌────────┐
-│ Booking │───►│ Select      │───►│ Process  │───►│  Paid  │
-│ Created │    │ Method      │    │ Payment  │    │   ✓    │
-└─────────┘    └─────────────┘    └────┬─────┘    └────────┘
-                                       │
-                                       ▼
-                                  ┌──────────┐    ┌─────────┐
-                                  │  Failed  │───►│  Retry  │──► (kembali ke Process)
-                                  └──────────┘    └─────────┘
-                                       │
-                                       ▼
-                                  ┌──────────┐
-                                  │ Expired  │ (auto, setelah timeout)
-                                  └──────────┘
-```
-
-**Status pembayaran:** `pending` → `paid` | `failed` → `expired`
 
 ---
 
 ## 🤝 Kontribusi
 
-Lihat [CONTRIBUTING.md](CONTRIBUTING.md) untuk panduan lengkap kontribusi.
+Lihat [CONTRIBUTING.md](CONTRIBUTING.md) untuk panduan lengkap.
 
-**Quick start:**
-
-1. Fork repository ini
-2. Buat branch fitur baru: `git checkout -b feature/nama-fitur`
-3. Commit perubahan: `git commit -m 'feat: deskripsi singkat'`
-4. Push ke branch: `git push origin feature/nama-fitur`
+1. Fork repository
+2. Buat branch: `git checkout -b feature/nama-fitur`
+3. Commit: `git commit -m 'feat: deskripsi singkat'`
+4. Push: `git push origin feature/nama-fitur`
 5. Buat Pull Request
 
 ---
 
 ## 📄 Lisensi
 
-Project ini dilisensikan di bawah [MIT License](LICENSE).
-
----
-
-## 👨‍💻 Author
-
-**Reefai** — Pemrograman Web Lanjut (PWL)
+[MIT License](LICENSE)
 
 ---
 
 <p align="center">
-  <sub>Built with ❤️ using Laravel 12 • Tailwind CSS 4 • Alpine.js</sub>
+  <sub>Built with ❤️ using Laravel 12 · Tailwind CSS 4 · Alpine.js · Chart.js</sub>
 </p>

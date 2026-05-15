@@ -1,9 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Booking #' . $booking->id)
 
 @section('content')
-<div class="max-w-4xl mx-auto px-4 py-8">
+<div>
     {{-- Back Link --}}
     <div class="mb-6">
         <a href="{{ url('/admin/bookings') }}" class="inline-flex items-center gap-1 text-sm text-muted hover:text-ink transition-colors">
@@ -28,12 +28,12 @@
     @endif
 
     {{-- Page Header --}}
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
-            <h1 class="text-3xl font-bold text-ink">Booking #{{ $booking->id }}</h1>
+            <h1 class="text-xl font-bold text-ink">Booking #{{ $booking->id }}</h1>
             <div class="flex items-center gap-2 mt-1">
                 @include('components.status-badge', ['status' => $booking->status])
-                <span class="text-sm text-muted">Created {{ $booking->created_at->format('M d, Y \a\t g:i A') }}</span>
+                <span class="text-xs text-muted">Created {{ $booking->created_at->format('M d, Y \a\t g:i A') }}</span>
             </div>
         </div>
     </div>
@@ -108,6 +108,35 @@
                     </div>
                 @endif
             </div>
+
+            {{-- Payment History --}}
+            @if($booking->payments->count() > 0)
+            <div class="border border-hairline rounded-md p-6">
+                <h2 class="text-lg font-semibold text-ink mb-4">Payment History</h2>
+                <div class="space-y-3">
+                    @foreach($booking->payments as $payment)
+                        <div class="flex items-center justify-between p-3 rounded-sm bg-surface-soft border border-hairline-soft">
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center gap-2 mb-0.5">
+                                    <span class="text-xs font-mono text-ink">{{ $payment->reference }}</span>
+                                    @include('components.status-badge', ['status' => $payment->status])
+                                </div>
+                                <p class="text-xs text-muted">
+                                    {{ $payment->method ? str_replace('_', ' ', ucfirst($payment->method)) : 'No method' }}
+                                    · {{ $payment->created_at->format('d M Y, H:i') }}
+                                </p>
+                            </div>
+                            <div class="flex items-center gap-3 flex-shrink-0">
+                                <span class="text-sm font-semibold text-ink">Rp {{ number_format($payment->amount, 0, ',', '.') }}</span>
+                                <a href="{{ route('admin.payments.show', $payment) }}" class="text-xs text-rausch hover:text-rausch-active font-medium transition-colors">
+                                    View →
+                                </a>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
         </div>
 
         {{-- Status Actions Sidebar --}}

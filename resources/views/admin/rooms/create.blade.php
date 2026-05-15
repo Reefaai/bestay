@@ -1,19 +1,18 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Create Room')
 
 @section('content')
-<div class="max-w-3xl mx-auto px-4 py-8">
-    {{-- Page Header --}}
-    <div class="mb-8">
+<div>
+    <div class="mb-6">
         <a href="{{ route('admin.rooms.index') }}" class="inline-flex items-center gap-1 text-sm text-muted hover:text-ink transition-colors mb-4">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
             </svg>
             Back to Rooms
         </a>
-        <h1 class="text-3xl font-bold text-ink">Create Room</h1>
-        <p class="text-muted mt-1">Add a new room to your inventory</p>
+        <h1 class="text-xl font-bold text-ink">Create Room</h1>
+        <p class="text-sm text-muted mt-0.5">Add a new room to your inventory</p>
     </div>
 
     {{-- Flash Messages --}}

@@ -1,10 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Booking Conflicts')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 py-8">
-    {{-- Back Link --}}
+<div>
     <div class="mb-6">
         <a href="{{ url('/admin/bookings') }}" class="inline-flex items-center gap-1 text-sm text-muted hover:text-ink transition-colors">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -14,10 +13,9 @@
         </a>
     </div>
 
-    {{-- Page Header --}}
-    <div class="mb-8">
-        <h1 class="text-3xl font-bold text-ink">Booking Conflicts</h1>
-        <p class="text-muted mt-1">Bookings with overlapping dates on the same room</p>
+    <div class="mb-6">
+        <h1 class="text-xl font-bold text-ink">Booking Conflicts</h1>
+        <p class="text-sm text-muted mt-0.5">Bookings with overlapping dates on the same room</p>
     </div>
 
     {{-- Flash Messages --}}

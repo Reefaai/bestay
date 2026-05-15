@@ -1,14 +1,13 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Manage Bookings')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 py-8">
-    {{-- Page Header --}}
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+<div>
+    <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
-            <h1 class="text-3xl font-bold text-ink">Manage Bookings</h1>
-            <p class="text-muted mt-1">View and manage all guest reservations</p>
+            <h1 class="text-xl font-bold text-ink">Manage Bookings</h1>
+            <p class="text-sm text-muted mt-0.5">View and manage all guest reservations</p>
         </div>
         <a href="{{ url('/admin/bookings/conflicts') }}" class="inline-flex items-center gap-1 px-6 py-2 text-sm font-medium text-ink border border-hairline rounded-sm hover:bg-surface-soft transition-colors">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">

@@ -1,14 +1,13 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Manage Rooms')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 py-8">
-    {{-- Page Header --}}
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
+<div>
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
         <div>
-            <h1 class="text-3xl font-bold text-ink">Manage Rooms</h1>
-            <p class="text-muted mt-1">Create, edit, and manage your room inventory</p>
+            <h1 class="text-xl font-bold text-ink">Manage Rooms</h1>
+            <p class="text-sm text-muted mt-0.5">Create, edit, and manage your room inventory</p>
         </div>
         <a href="{{ route('admin.rooms.create') }}" class="inline-flex items-center justify-center gap-1 bg-rausch text-on-primary font-medium text-sm px-8 py-2 rounded-sm hover:bg-rausch-active transition-colors">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">

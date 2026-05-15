@@ -30,7 +30,7 @@
                     </a>
 
                     @if(auth()->user()->isAdmin())
-                        <a href="/admin/rooms" class="text-ink hover:text-rausch text-sm font-medium transition-colors">
+                        <a href="{{ route('admin.dashboard') }}" class="text-ink hover:text-rausch text-sm font-medium transition-colors">
                             Admin
                         </a>
                     @endif
@@ -69,7 +69,7 @@
                             </a>
 
                             @if(auth()->user()->isAdmin())
-                                <a href="/admin/rooms" class="block px-4 py-2 text-sm text-ink hover:bg-surface-soft transition-colors">
+                                <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-sm text-ink hover:bg-surface-soft transition-colors">
                                     Admin Panel
                                 </a>
                             @endif
@@ -180,7 +180,7 @@
                 </a>
 
                 @if(auth()->user()->isAdmin())
-                    <a href="/admin/rooms" class="block px-3 py-2 rounded-sm text-ink hover:text-rausch hover:bg-surface-soft text-sm font-medium transition-colors">
+                    <a href="{{ route('admin.dashboard') }}" class="block px-3 py-2 rounded-sm text-ink hover:text-rausch hover:bg-surface-soft text-sm font-medium transition-colors">
                         Admin Panel
                     </a>
                 @endif
