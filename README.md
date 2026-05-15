@@ -112,9 +112,6 @@ Buka **http://localhost:8000**
 
 ## 📋 Prasyarat & Instalasi Lengkap
 
-<details>
-<summary><strong>Lihat prasyarat & langkah instalasi lengkap</strong></summary>
-
 ### Prasyarat
 
 | Software | Versi Minimum |
@@ -182,14 +179,9 @@ npm run dev            # Terminal 2
 php artisan queue:listen  # Terminal 3 (opsional)
 ```
 
-</details>
-
 ---
 
 ## 📁 Struktur Project
-
-<details>
-<summary><strong>Lihat struktur direktori</strong></summary>
 
 ```
 bestay/
@@ -237,14 +229,9 @@ bestay/
 └── CONTRIBUTING.md
 ```
 
-</details>
-
 ---
 
 ## 🔌 API Documentation
-
-<details>
-<summary><strong>Lihat dokumentasi REST API lengkap</strong></summary>
 
 Autentikasi menggunakan **Laravel Sanctum** (Bearer Token).
 
@@ -322,14 +309,9 @@ curl -X POST http://localhost:8000/api/login \
 
 > Semua endpoint yang membutuhkan auth: `Authorization: Bearer {token}`
 
-</details>
-
 ---
 
 ## 🗄️ Database Schema
-
-<details>
-<summary><strong>Lihat skema database & payment flow</strong></summary>
 
 ```
 ┌──────────┐       ┌──────────────┐       ┌──────────┐
@@ -383,14 +365,9 @@ confirmed → cancelled | completed
 
 Lihat [docs/erd.md](docs/erd.md) untuk dokumentasi lengkap dengan diagram Mermaid.
 
-</details>
-
 ---
 
 ## 🚢 Deployment
-
-<details>
-<summary><strong>Lihat panduan deploy ke Railway</strong></summary>
 
 ### Railway (Recommended)
 
@@ -429,8 +406,6 @@ Railway tidak punya cron bawaan. Gunakan [cron-job.org](https://cron-job.org) (g
 
 - **Sederhana:** Set `QUEUE_CONNECTION=sync`
 - **Production:** Tambah service baru, start command: `php artisan queue:work --tries=3`
-
-</details>
 
 ---
 
