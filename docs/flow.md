@@ -198,11 +198,11 @@ flowchart LR
 
 ```mermaid
 flowchart TD
-    A[Admin Login] --> B[/admin/]
+    A[Admin Login] --> B["GET /admin"]
     B --> C[AdminDashboardController]
     C --> D[Kumpulkan statistik]
 
-    D --> D1[Total bookings & status]
+    D --> D1[Total bookings dan status]
     D --> D2[Total revenue dari paid payments]
     D --> D3[Jumlah user terdaftar]
     D --> D4[Jumlah kamar aktif]
@@ -213,31 +213,42 @@ flowchart TD
     D --> D9[5 booking terbaru]
     D --> D10[5 payment terbaru]
 
-    D1 & D2 & D3 & D4 & D5 & D6 & D7 & D8 & D9 & D10 --> E[Render admin.dashboard]
-    E --> F[Chart.js: Bar + Line + Donut]
-    E --> G[Alert banner jika ada konflik / pending payment]
+    D1 --> E[Render admin.dashboard]
+    D2 --> E
+    D3 --> E
+    D4 --> E
+    D5 --> E
+    D6 --> E
+    D7 --> E
+    D8 --> E
+    D9 --> E
+    D10 --> E
+    E --> F["Chart.js: Bar + Line + Donut"]
+    E --> G[Alert banner jika ada konflik atau pending payment]
 ```
 
 ### 4.2 Booking Management
 
 ```mermaid
-flowchart LR
-    A[/admin/bookings] --> B{Filter status?}
-    B -->|Ya| C[Query dengan WHERE status=...]
+flowchart TD
+    A["GET /admin/bookings"] --> B{Filter status?}
+    B -->|Ya| C[Query WHERE status]
     B -->|Tidak| D[Query semua booking]
-    C & D --> E[Paginate 15/halaman]
-    E --> F[Tampilkan tabel]
+    C --> E[Paginate 15 per halaman]
+    D --> E
+    E --> F[Tampilkan tabel booking]
 
     F --> G[Klik View]
-    G --> H[/admin/bookings/id]
+    G --> H["GET /admin/bookings/{id}"]
     H --> I[Detail booking + payment history]
-    I --> J{Status saat ini?}
-    J -->|pending| K[Tombol: Confirm / Cancel]
-    J -->|confirmed| L[Tombol: Complete / Cancel]
-    J -->|terminal| M[Tidak ada aksi]
+    I --> J{Status booking?}
+    J -->|pending| K["Tombol: Confirm / Cancel"]
+    J -->|confirmed| L["Tombol: Complete / Cancel"]
+    J -->|cancelled atau completed| M[Tidak ada aksi]
 
-    K & L --> N[PATCH /admin/bookings/id/status]
-    N --> O[BookingService::updateStatus]
+    K --> N["PATCH /admin/bookings/{id}/status"]
+    L --> N
+    N --> O["BookingService::updateStatus()"]
     O --> P{Transisi valid?}
     P -->|Ya| Q[UPDATE bookings]
     P -->|Tidak| R[Error: invalid transition]
@@ -246,58 +257,61 @@ flowchart LR
 ### 4.3 Payment Monitoring & Verifikasi
 
 ```mermaid
-flowchart LR
-    A[/admin/payments] --> B{Filter?}
-    B --> C[status / method / search]
-    C --> D[Paginate 20/halaman]
-    D --> E[Tampilkan tabel]
+flowchart TD
+    A["GET /admin/payments"] --> B[Filter: status / method / search]
+    B --> C[Paginate 20 per halaman]
+    C --> D[Tampilkan tabel payment]
 
-    E --> F[Klik View]
-    F --> G[/admin/payments/id]
-    G --> H[Detail payment + status history timeline]
-    H --> I{Status saat ini?}
-    I -->|pending| J[Override: paid / failed]
-    I -->|paid + booking cancelled| K[Override: refunded]
-    I -->|terminal| L[Tidak ada aksi]
+    D --> E[Klik View]
+    E --> F["GET /admin/payments/{id}"]
+    F --> G[Detail payment + status history timeline]
+    G --> H{Status payment?}
+    H -->|pending| I["Override: paid / failed"]
+    H -->|"paid dan booking cancelled"| J[Override: refunded]
+    H -->|terminal| K[Tidak ada aksi]
 
-    J & K --> M[PATCH /admin/payments/id/status]
-    M --> N[PaymentService::adminOverride]
-    N --> O[Validasi precondition]
-    O --> P[SELECT FOR UPDATE]
-    P --> Q[UPDATE payments + INSERT log]
+    I --> L["PATCH /admin/payments/{id}/status"]
+    J --> L
+    L --> M["PaymentService::adminOverride()"]
+    M --> N[Validasi precondition]
+    N --> O[SELECT FOR UPDATE]
+    O --> Q[UPDATE payments + INSERT log]
     Q --> R[Kirim notifikasi]
 ```
 
 ### 4.4 User Management
 
 ```mermaid
-flowchart LR
-    A[/admin/users] --> B{Filter?}
-    B --> C[search / role]
-    C --> D[Paginate 20/halaman]
-    D --> E[Tabel user + jumlah booking]
+flowchart TD
+    A["GET /admin/users"] --> B[Filter: search / role]
+    B --> C[Paginate 20 per halaman]
+    C --> D["Tabel user + jumlah booking (withCount)"]
 
-    E --> F[Klik View]
-    F --> G[/admin/users/id]
-    G --> H[Profil user + riwayat booking lengkap]
+    D --> E[Klik View]
+    E --> F["GET /admin/users/{id}"]
+    F --> G[Profil user]
+    F --> H[Riwayat booking lengkap]
+    G --> I[Nama, email, role, tanggal daftar]
+    H --> J[Daftar booking dengan status dan total harga]
 ```
 
 ### 4.5 Conflict Detection
 
 ```mermaid
 flowchart TD
-    A[/admin/bookings/conflicts] --> B[Query semua booking pending/confirmed]
-    B --> C[Group by room_id]
-    C --> D{Tiap room: ada >= 2 booking?}
-    D -->|Tidak| E[Skip]
-    D -->|Ya| F[Cek overlap O n²]
-    F --> G{A.check_in < B.check_out AND A.check_out > B.check_in?}
-    G -->|Ya| H[Tandai sebagai konflik]
-    G -->|Tidak| I[Tidak konflik]
-    H --> J[Kumpulkan ID unik]
-    J --> K[Filter dari collection yang sudah di-load]
-    K --> L[Group by room_id]
-    L --> M[Tampilkan per room]
+    A["GET /admin/bookings/conflicts"] --> B["Query booking WHERE status IN pending, confirmed"]
+    B --> C["Eager load user + room"]
+    C --> D[Group by room_id]
+    D --> E{Jumlah booking per room}
+    E -->|"kurang dari 2"| F[Skip room ini]
+    E -->|"2 atau lebih"| G[Cek overlap antar pasangan]
+    G --> H{"A.check_in < B.check_out\nDAN\nA.check_out > B.check_in"}
+    H -->|Ya| I[Catat ID booking sebagai konflik]
+    H -->|Tidak| J[Tidak konflik]
+    I --> K[Kumpulkan semua ID unik]
+    K --> L[Filter dari collection yang sudah di-load]
+    L --> M[Group by room_id]
+    M --> N[Tampilkan konflik per room]
 ```
 
 ### Access Control
