@@ -68,7 +68,7 @@ Sistem reservasi hotel berbasis web yang dibangun dengan **Laravel 12**, **Tailw
 | [Screenshots](docs/screenshots.md) | Dokumentasi visual semua halaman — publik, user, dan admin |
 | [ERD — Entity Relationship Diagram](docs/erd.md) | Skema database lengkap, diagram Mermaid, relasi antar tabel, status transisi |
 | [System Flow](docs/flow.md) | Alur booking, pembayaran, notifikasi, admin dashboard, scheduler — dengan diagram Mermaid |
-| [API Endpoint][docs/api.md] | Dokumentasi jelas untuk semua API endpoint di project ini |
+| [API Endpoint](docs/api.md) | Dokumentasi jelas untuk semua API endpoint di project ini |
 
 ---
 
