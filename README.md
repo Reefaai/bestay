@@ -63,6 +63,15 @@ Sistem reservasi hotel berbasis web yang dibangun dengan **Laravel 12**, **Tailw
 
 ---
 
+## 📖 Dokumentasi
+
+| Dokumen | Deskripsi |
+|---------|-----------|
+| [ERD — Entity Relationship Diagram](docs/erd.md) | Skema database lengkap, relasi antar tabel, status transisi |
+| [System Flow](docs/flow.md) | Alur booking, pembayaran, notifikasi, admin, dan scheduler |
+
+---
+
 ## 📋 Prasyarat
 
 Pastikan sudah terinstall:
@@ -208,6 +217,7 @@ bestay/
 │   ├── api.php                  # REST API routes (Sanctum protected)
 │   └── web.php                  # Web routes (session-based)
 ├── tests/                       # PHPUnit test suite
+├── docs/                        # Dokumentasi (ERD, flow)
 ├── nixpacks.toml                # Railway deployment config
 ├── CONTRIBUTING.md              # Panduan kontribusi
 └── LICENSE                      # MIT License
