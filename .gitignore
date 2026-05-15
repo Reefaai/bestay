@@ -32,3 +32,7 @@ Thumbs.db
 # Homestead
 Homestead.json
 Homestead.yaml
+
+# Agents
+AGENTS.md
+.kiro/specs
