@@ -13,7 +13,12 @@ use App\Http\Controllers\Web\RoomController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('home');
+    $featuredRooms = \App\Models\Room::active()
+        ->orderBy('price_per_night', 'desc')
+        ->limit(6)
+        ->get();
+
+    return view('home', compact('featuredRooms'));
 })->name('home');
 
 // Authentication routes
