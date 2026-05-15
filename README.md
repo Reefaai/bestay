@@ -16,16 +16,16 @@ Sistem reservasi hotel berbasis web yang dibangun dengan **Laravel 12**, **Tailw
 <details>
 <summary><strong>Lihat Screenshots</strong></summary>
 
-| Halaman Utama | Daftar Kamar | Detail Kamar |
-|:---:|:---:|:---:|
-| ![Home](docs/screenshots/home.png) | ![Rooms](docs/screenshots/rooms.png) | ![Room Detail](docs/screenshots/room-detail.png) |
+| Halaman Utama                           | Daftar Kamar                         | Detail Kamar                                     |
+| :---------------------------------------:| :------------------------------------:| :------------------------------------------------:|
+| ![Home](docs/screenshots/home-full.png) | ![Rooms](docs/screenshots/rooms.png) | ![Room Detail](docs/screenshots/room-detail.png) |
 
-| Dashboard User | Pembayaran | Admin Dashboard |
-|:---:|:---:|:---:|
-| ![Dashboard](docs/screenshots/dashboard.png) | ![Payment](docs/screenshots/payment.png) | ![Admin](docs/screenshots/admin-dashboard.png) |
+| Dashboard User                               | Pembayaran                               | Admin Dashboard                                |
+| :--------------------------------------------:| :----------------------------------------:| :----------------------------------------------:|
+| ![Dashboard](docs/screenshots/bookings.png) | ![Payment](docs/screenshots/payment.png) | ![Admin](docs/screenshots/admin-dash.png) |
 
-| Admin Bookings | Admin Payments | Admin Users |
-|:---:|:---:|:---:|
+| Admin Bookings                                   | Admin Payments                                   | Admin Users                                |
+| :------------------------------------------------:| :------------------------------------------------:| :------------------------------------------:|
 | ![Bookings](docs/screenshots/admin-bookings.png) | ![Payments](docs/screenshots/admin-payments.png) | ![Users](docs/screenshots/admin-users.png) |
 
 </details>
